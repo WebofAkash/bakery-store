@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakery Store</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #F8D7D7;
+            --secondary: #A06060;
+            --dark: #3A3131;
+            --light: #FFF5F5;
+            --accent: #D4A5A5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Typography */
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--primary);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            transition: width 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary);
+        }
+        
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        /* Hero Section */
+        .hero {
+  height: 100vh;
+  background: url('/banner.png') no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: 80px;
+  text-align: center;
+  padding: 20px;
+}
+
+.hero-overlay {
+  background-color: rgba(255, 255, 255, 0.75);
+  padding: 40px;
+  border-radius: 20px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.hero-subtitle {
+  font-size: 2rem;
+  color: #A06060;
+  margin-bottom: 10px;
+  font-family: 'Playfair Display', cursive;
+}
+
+.hero-title {
+  font-size: 4rem;
+  color: #7D3C3C;
+  font-weight: 900;
+  margin-bottom: 20px;
+}
+
+.hero-quote {
+  font-size: 1.2rem;
+  color: #7D3C3C;
+  font-style: italic;
+  margin-bottom: 30px;
+}
+
+.hero-btn {
+  background-color: #A06060;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-block;
+  transition: all 0.3s;
+}
+
+.hero-btn:hover {
+  background-color: #7D3C3C;
+}
+
+        
+        /* Products Section */
+        .section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-img {
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-card:hover .product-img img {
+            transform: scale(1.1);
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-name {
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .product-price {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        /* Story Section */
+        .story {
+            background-color: var(--primary);
+        }
+        
+        .story-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .story-img {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .story-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .story-img img:hover {
+  transform: scale(1.05); /* Zoom effect */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Optional lift shadow */
+}
+        
+        .story-text p {
+            margin-bottom: 20px;
+        }
+        
+        /* Contact Section */
+        .contact {
+            text-align: center;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: var(--secondary);
+            border-radius: 50%;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--secondary);
+            color: white;
+            transform: translateY(-5px);
+        }
+        
+        .contact-info {
+            margin-bottom: 30px;
+        }
+        
+        .contact-info p {
+            margin-bottom: 5px;
+        }
+        
+        /* Footer */
+        .footer-bottom {
+  background-color: #f8d6d6;
+  color: #a06161;
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.footer-bottom p {
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .story-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .story-img {
+                order: -1;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+
+        .about-img img {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  border-radius: 12px;
+}
+
+.about-img img:hover {
+  transform: scale(1.07);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+        
+        @media (max-width: 768px) {
+            nav ul {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                background-color: var(--primary);
+                width: 100%;
+                flex-direction: column;
+                padding: 20px 0;
+                transition: left 0.3s;
+            }
+            
+            nav ul.active {
+                left: 0;
+            }
+            
+            nav ul li {
+                margin: 10px 0;
+                text-align: center;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .section {
+                padding: 60px 0;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Content Editable styles */
+        [contenteditable="true"] {
+            border-bottom: 1px dashed #ccc;
+            padding: 2px 5px;
+            outline: none;
+        }
+        
+        [contenteditable="true"]:focus {
+            background-color: #f9f9f9;
+            border-bottom-color: var(--secondary);
+        }
+        
+        /* Admin Edit Button */
+        .admin-edit {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .admin-edit:hover {
+            background-color: var(--dark);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">Bakery Store</a>
+            <nav>
+                <ul id="nav-menu">
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#story">Our Story</a></li>
+                    <li><a href="#contact">Contacts</a></li>
+                </ul>
+                <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+<section class="hero">
+    <div class="hero-overlay">
+      <h2 class="hero-subtitle">Bakery Store</h2>
+      <h1 class="hero-title">CAKE & COOKIE</h1>
+      <p class="hero-quote">"Enjoy our cakes and cookies—pure bliss in every bite!"</p>
+      <a href="#products" class="hero-btn">Our Products</a>
+    </div>
+  </section>
+  
+
+    <!-- Products Section -->
+    <section id="products" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Products</h2>
+                <p>Indulge in our handcrafted delights made with fresh ingredients and lots of love. From rich brownies to delicate tarts, each treat is baked to perfection to satisfy every sweet craving.</p>
+            </div>
+            
+            <div id="products-container" class="products-grid">
+                <!-- Product Card 1 -->
+                <div class="product-card" data-id="1">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1571115177098-24ec42ed204d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Pastel de chocolate">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name" >Classic Vanilla Cupcake</h3>
+                        <p class="product-price" >$25.00</p>
+                        <p class="product-desc" >Soft, fluffy, and topped with creamy vanilla frosting — a timeless favorite.</p>
+                    </div>
+                </div>
+                
+                <!-- Product Card 2 -->
+                <div class="product-card" data-id="2">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1552689486-f6773047d19f?ixlib=rb-1.2.1&auto=format&fit=crop&w=651&q=80" alt="Cookies">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name" >Chocolate Fudge Brownie</h3>
+                        <p class="product-price" >$8.00</p>
+                        <p class="product-desc" >Rich, gooey, and deeply chocolatey — pure indulgence in every square.</p>
+                    </div>
+                </div>
+                
+                <!-- Product Card 3 -->
+                <div class="product-card" data-id="3">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Torta de frutas">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Strawberry Dream Cake</h3>
+                        <p class="product-price" >$15.00</p>
+                        <p class="product-desc" >Layers of sponge cake filled with fresh strawberries and whipped cream.</p>
+                    </div>
+                </div>
+                
+                <!-- Product Card 4 -->
+                <div class="product-card" data-id="4">
+                    <div class="product-img">
+                        <img src="https://imgs.search.brave.com/IkI4q6w9WAmwUW5AhTUA1UdhY-yyiDvzrq-vhztW7UY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wcmV2/aWV3LnJlZGQuaXQv/bWFkZS1jaW5uYW1v/bi1yb2xscy1idXQt/d2h5LWRvLXNvbWUt/b2YtdGhlLXN3aXJs/cy1qdW1wLW91dC12/MC16bDVwcjRudThx/ZWExLmpwZz93aWR0/aD02NDAmY3JvcD1z/bWFydCZhdXRvPXdl/YnAmcz1hZjI3ZTE0/MTc3MTRlYzI2MjQw/ZTg2NThkNzgzZWQy/NGY1MWZkZDlm" alt="Alfajores">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name" >Cinnamon Swirl Roll</h3>
+                        <p class="product-price">$6.00</p>
+                        <p class="product-desc">Warm, buttery rolls with cinnamon-sugar layers and a sweet glaze.</p>
+                    </div>
+                </div>
+                
+                <!-- Product Card 5 -->
+                <div class="product-card" data-id="5">
+                    <div class="product-img">
+                        <img src="https://imgs.search.brave.com/Y5nQ6PzTFfiRKNAH7VyujUgUpq1oScGBD1Bzpc_WCqY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMwMS5ueXQuY29t/L2ltYWdlcy8yMDIx/LzA0LzA3L2Rpbmlu/Zy8wNmNyb2lzc2Fu/dHNyZXg0LWFsbW9u/ZC9tZXJsaW5fMTg0/ODQyMTE3XzMyMTA5/MGRhLWNlM2EtNGM0/ZC05ZTZhLTM0NjE1/MDZhMzlkMy1qdW1i/by5qcGc" alt="Cheesecake">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name" >Almond Croissant</h3>
+                        <p class="product-price" >$5.00</p>
+                        <p class="product-desc" >Flaky, golden pastry filled with almond cream and dusted with powdered sugar.</p>
+                    </div>
+                </div>
+                
+                <!-- Product Card 6 -->
+                <div class="product-card" data-id="6">
+                    <div class="product-img">
+                        <img src="https://imgs.search.brave.com/8Ch-jnDpg2MXjgrs2CRiAaPAvHDmss8BTuXxbNyldNk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXBw/eWhvb2xpZ2Fucy5j/YS93cC1jb250ZW50/L3VwbG9hZHMvMjAx/NS8wNS9JTUdfODMz/OC5qcGc" alt="Trufas">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name" >Lemon Tart Delight</h3>
+                        <p class="product-price">$3.50 c/u</p>
+                        <p class="product-desc" >Tangy lemon curd in a crisp pastry shell, topped with a light meringue kiss.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section id="story" class="section story">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Story</h2>
+            </div>
+            
+            <div class="story-content">
+                <div class="story-img">
+                    <img src="/image.png" alt="Our Story">
+                </div>
+                <div class="story-text">
+                    <p>Born from a passion for baking and a love for sweet moments, our bakery started in a cozy kitchen in Manizales.</p>
+                    <p >We believe in using only the finest ingredients to create treats that warm the heart.</p>
+                    <p >Every bite tells a story of tradition, care, and creativity.</p>
+                    <p >Join us in celebrating the joy of homemade goodness.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p >Have a question or craving? We'd love to hear from you!
+                    Reach out for orders, feedback, or just to say hello.</p>
+            </div>
+            
+            <div class="social-links">
+                <a href="https://www.instagram.com/im.akashhh?igsh=Y3VjZG54ajVod3J6" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.webofakash.com" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.webofakash.com" target="_blank"><i class="fas fa-shopping-basket"></i></a>
+                <a href="https://www.webofakash.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            </div>
+            
+            <div class="contact-info">
+                <p><i class="fas fa-map-marker-alt"></i> <span >New Delhi, India</span></p>
+                <p><i class="fas fa-phone"></i> <span >+91 XXXXXXXXXX</span></p>
+                <p><i class="fas fa-envelope"></i> <span >imakashkr08@gmail.com</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-bottom">
+        <p>&copy; <span id="year"></span> <strong>Bakery Store</strong> 🍰 — All rights reserved. Crafted with ❤️ by WebofAkash</p>
+      </footer>
+      
+
+    
+
+    
+    <!-- Overlay (Hidden by default) -->
+    <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+
+    
+</body>
+</html>
